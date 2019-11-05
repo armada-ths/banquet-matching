@@ -1,10 +1,3 @@
 # banquet-matching
 
-Preferences:
-- Seating should be M/F/M/F...
-- Companies and students in the same field should be seated together
-- ???
-
-Questions:
-- Are the tables the same size?
-- Priority of preferences?
+This reposotory contains the algorithms for fetching the matching data betweeen students and companies and placing them in the most optimal way for the THS Armada Grand Banquet.
