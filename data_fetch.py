@@ -29,7 +29,7 @@ def get_exhibitors(cur, banquet_id, fair_id):
                 FROM banquet_participant p, exhibitors_exhibitor e \
                 WHERE p.banquet_id = %s AND NOT p.giveaway AND p.company_id = e.company_id AND e.fair_id = %s",
                 (banquet_id, fair_id))
-    # TODO: Are there any giveaway participants...?
+    
     res = cur.fetchall()
 
     # Create a dictionary that maps a participant id to a company
@@ -116,10 +116,13 @@ def main():
     participant_list = get_participants(cur, CURRENT_BANQUET)
     company_participant_list, participant_to_exhibitor = get_exhibitors(cur, CURRENT_BANQUET, CURRENT_FAIR)
     matching_student_list = get_matching_participants(cur, CURRENT_BANQUET)
+    # The set operations below cause no problem because there are no duplicate participant id's.
+    non_matching_student_list = list(set(participant_list) - set(company_participant_list + matching_student_list))
     
     print("Participants to be placed:", len(participant_list))
     print("Company representatives:", len(company_participant_list))
     print("Students subject to matching: ", len(matching_student_list))
+    print("Students not subject to matching:", len(non_matching_student_list))
 
     student_similarities = {}
 
@@ -130,6 +133,7 @@ def main():
     obj = {
        'all_participants': participant_list,
        'matching_students': matching_student_list,
+       'non_matching_student': non_matching_student_list,
        'company_participants': company_participant_list,
        'participant_to_exhibitor': participant_to_exhibitor,
        'similarities': student_similarities
