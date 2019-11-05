@@ -117,26 +117,26 @@ def main():
     company_participant_list, participant_to_exhibitor = get_exhibitors(cur, CURRENT_BANQUET, CURRENT_FAIR)
     matching_student_list = get_matching_participants(cur, CURRENT_BANQUET)
     
-    print(len(participant_list), len(company_participant_list), len(matching_student_list))
+    print("Participants to be placed:", len(participant_list))
+    print("Company representatives:", len(company_participant_list))
+    print("Students subject to matching: ", len(matching_student_list))
 
     student_similarities = {}
 
-    #matching_student_list = matching_student_list[:1]
+    for i, student_id in enumerate(matching_student_list):
+       print("Fetching data for " + str(i + 1) + "/" + str(len(matching_student_list)) + "...")
+       student_similarities[student_id] = get_matching_results(cur, student_id)
 
-    #for i, student_id in enumerate(matching_student_list):
-    #    print("Fetching data for " + str(i + 1) + "/" + str(len(matching_student_list)) + "...")
-    #    student_similarities[student_id] = get_matching_results(cur, student_id)
+    obj = {
+       'all_participants': participant_list,
+       'matching_students': matching_student_list,
+       'company_participants': company_participant_list,
+       'participant_to_exhibitor': participant_to_exhibitor,
+       'similarities': student_similarities
+    }
 
-    #obj = {
-    #    'all_participants': participant_list,
-    #    'matching_students': matching_student_list,
-    #    'company_participants': company_participant_list,
-    #    'participant_to_exhibitor': participant_to_exhibitor,
-    #    'similarities': student_similarities
-    #}
-
-    #with open('results.json', 'w') as file:
-    #    json.dump(obj, file, indent = 4, separators=(',', ': '))
+    with open('results.json', 'w') as file:
+       json.dump(obj, file, indent = 4, separators=(',', ': '))
 
 if __name__ == "__main__":
     main()
