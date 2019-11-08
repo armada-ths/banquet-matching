@@ -80,9 +80,9 @@ def get_matching_results(cur, participant_id):
     weights = {
         "industries": 1,
         "competences": 1,
-        "employments": 0.2,
-        "values": 0.5,
-        "locations": 0.2
+        "employments": 0,
+        "values": 0.25,
+        "locations": 0
     }
 
     for category in ["industries", "competences", "employments", "values", "locations"]:
