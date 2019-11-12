@@ -112,31 +112,41 @@ def initialPlacement():
                         if currentStudent < len(studentsNames):
                             allTables[num].append(getNextStudent())
 
+def tableScore(table):
+    tableParticipants = list(map(lambda l: l[1], table))
 
-def calculateScores(newAllTables):
-    tableNum = 0
-    scoreBanquet = 0
-    scoresStudents = {}
-    scoresTables = []
-    for table in newAllTables:
-        scoresTables.append(0)
-        representativesCount = getNumberOfRepresentatives(table)
-        studentsCountPerTable = getNumberOfStudents(table)
-        for x in table:
-            if x[0] == 'student':
-                scoresStudents[x[1]] = 0
-                for y in table:
-                    if y[0] == 'representative':
-                        scoresStudents[x[1]] += allStudentsDict[str(x[1])][str(y[2] - companyOffset)]
-                if (representativesCount > 0):
-                    scoresStudents[x[1]] /= representativesCount
-                scoresTables[tableNum] += scoresStudents[x[1]]
-        if (studentsCountPerTable > 0):
-            scoresTables[tableNum] /= studentsCountPerTable
-        scoreBanquet += scoresTables[tableNum]
-        tableNum += 1
-    scoreBanquet /= numberOfTables
-    return scoreBanquet
+    # The below operations are unnecessarily slow (unless there is some lookup table)
+    # but shouldn't matter for our purposes
+    students = [p for p in tableParticipants if p in studentsNames] # Only students part of matching
+    representatives = [p for p in tableParticipants if p in representativesData] # Only company representatives
+    
+    # We ignore people at the table that have no matching data
+    total = 0
+    for student in students:
+        studentScore = 0
+        if len(representatives) == 0:
+            #print('Warning: No representative at table')
+            total += 0.0 # We consider this table a bad match. Maybe it should be good?
+        else:
+            for rep in representatives:
+                studentScore += allStudentsDict[str(student)][str(representativeCompany[str(rep)])]
+            studentScore /= len(representatives) # Average match with all representatives at the table
+        total += studentScore
+    
+    if len(students) == 0:
+        #print('Warning: No students at table')
+        return 1.0 # We consider a table with no students a good (perfect) match. Maybe it should be bad?
+    else:
+        return total / len(students)
+
+def calculateScores(tables):
+    nonEmptyTables = [table for table in tables if len(table) > 0]
+    total = 0
+    for table in nonEmptyTables:
+        total += tableScore(table)
+    return total / len(nonEmptyTables)
+
+
 
 initialPlacement()
 print("Tables initially: ", allTables)
