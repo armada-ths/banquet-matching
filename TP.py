@@ -138,7 +138,6 @@ def calculateScores(newAllTables):
     scoreBanquet /= numberOfTables
     return scoreBanquet
 
-
 initialPlacement()
 print("Tables initially: ", allTables)
 scoreBanquet = calculateScores(allTables)
@@ -168,6 +167,7 @@ while True:
         allTables[randTable1]) < 4 and getNumberOfRepresentatives(
         allTables[randTable2]) > 1 and getNumberOfRepresentatives(allTables[randTable2]) < 4:
         newRes = calculateScores(allTables)
+
     else:
         allTables[randTable2][randSpot2] = allTables[randTable1][randSpot1]
         allTables[randTable1][randSpot1] = swap
@@ -185,3 +185,8 @@ while True:
         break
 
 print("Final table placement: ", allTables)
+
+# Parse output, we only need the participant id's
+output = [list(map(lambda l: l[1], table)) for table in allTables]
+with open('placement_output.json', 'w') as file:
+    json.dump(output, file, indent = 4, separators=(',', ': '))
