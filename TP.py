@@ -164,7 +164,9 @@ while True:
 
     if getNumberOfStudents(allTables[randTable1]) > 1 and getNumberOfStudents(
             allTables[randTable2]) > 1 and getNumberOfRepresentatives(
-            allTables[randTable1]) > 1 and getNumberOfRepresentatives(allTables[randTable2]) > 1:
+        allTables[randTable1]) > 1 and getNumberOfRepresentatives(
+        allTables[randTable1]) < 4 and getNumberOfRepresentatives(
+        allTables[randTable2]) > 1 and getNumberOfRepresentatives(allTables[randTable2]) < 4:
         newRes = calculateScores(allTables)
     else:
         allTables[randTable2][randSpot2] = allTables[randTable1][randSpot1]
