@@ -16,6 +16,9 @@ allStudentsDict = json_data["similarities"]
 studentsNames = json_data["matching_students"]
 
 representativesData = json_data["company_participants"]
+random.shuffle(representativesData)
+random.shuffle(representativesData)
+random.shuffle(representativesData)
 representativeCompany = json_data["participant_to_exhibitor"]
 
 nonMatchingStudents = json_data["non_matching_student"]
